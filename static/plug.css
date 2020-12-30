@@ -10,3 +10,15 @@ table, tr, th, td {
 	padding: 5px;
 }
 
+div.swst {
+	background: url(/static/sw-on-off.png);
+	height: 34px;
+	width: 69px;
+	overflow: hidden;
+	background-position: -11px -69px;
+}
+
+div.swst.on {
+	background-position: -11px -124px;
+}
+

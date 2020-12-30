@@ -63,7 +63,6 @@ if __name__ == '__main__':
 	if not lock:
 		lock = True
 		button.when_pressed = partial(toggle, 0)
-#		button.when_released = togg2
 
 	app.run(debug=True, host='0.0.0.0', port=80)
 

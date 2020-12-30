@@ -5,13 +5,9 @@
 {% for i in range(0, 8) %}
 	<tr>
 		<td>{{ i+1 }}</td>
-		{% if sst[i] %}
-		<td><a href="#" class="sswitch on" id="sw{{i}}" title="{{i}}">
-			<img id="ic{{i}}" src="/static/sw-on.png"/></a></td>
-		{% else %}
-		<td><a href="#" class="sswitch" id="sw{{i}}" title="{{i}}">
-			<img id="ic{{i}}" src="/static/sw-off.png"/></a></td>
-		{% endif %}
+		<td><a href="#" class="sswitch{% if sst[i] %} on{% endif %}" id="sw{{i}}" title="{{i}}">
+				<div class="swst{% if sst[i] %} on{% endif %}" id="ic{{i}}"></div>
+		</a></td>
 	</tr>
 {% endfor %}
 </table>
@@ -31,6 +27,7 @@ $(document).ready(function() {
 				});
 				$('#ic'+id).attr('src', '/static/sw-off.png');
 				$(this).removeClass('on');
+				$('#ic'+id).removeClass('on');
 			} else {
 				$.ajax({
 					url: '/api/v1/switch/' + id + '/1',
@@ -38,6 +35,7 @@ $(document).ready(function() {
 				});
 				$('#ic'+id).attr('src', '/static/sw-on.png');
 				$(this).addClass('on');
+				$('#ic'+id).addClass('on');
 			}
 			return false;
 		});
@@ -53,11 +51,11 @@ update = function() {
 //			console.log(data);
 			for (i = 0; i < 8; i++) {
 				if (data[i]) {
-					$('#ic'+i).attr('src', '/static/sw-on.png');
 					$('#sw'+i).addClass('on');
+					$('#ic'+i).addClass('on');
 				} else {
-					$('#ic'+i).attr('src', '/static/sw-off.png');
 					$('#sw'+i).removeClass('on');
+					$('#ic'+i).removeClass('on');
 				}
 			}
 		}
