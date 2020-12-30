@@ -1,0 +1,40 @@
+{% include 'head.html' %}
+	<h1>Smart Socket Login</h1>
+	<table>
+		<tr>
+			<th>Username</th>
+			<td><input type="text" id="input_username" value=""/></td>
+		</tr>
+		<tr>
+			<th>Password</th>
+			<td><input type="password" id="input_password" value=""/></td>
+		</tr>
+		<tr>
+			<td></td>
+			<td><input type="button" id="button_login" value="login"/>
+	</table>
+
+<script type="text/javascript">
+
+$(document).ready(function(){
+	console.log('bind handler')
+	$('#button_login').click(function(){
+		console.log('call handler')
+		$.ajax({
+			url: '/api/v1/login',
+			method: 'POST',
+			data: {
+				username: $('#input_username').val(),
+				password: $('#input_password').val()
+			},
+			success: function() {
+				alert('login ok');
+			}
+		});
+	});
+});
+
+</script>
+
+</html>
+

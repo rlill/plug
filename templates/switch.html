@@ -1,0 +1,73 @@
+{% include 'head.html' %}
+	<h1>Smart Socket Switches</h1>
+
+	<table>
+{% for i in range(0, 8) %}
+	<tr>
+		<td>{{ i+1 }}</td>
+		{% if sst[i] %}
+		<td><a href="#" class="sswitch on" id="sw{{i}}" title="{{i}}">
+			<img id="ic{{i}}" src="/static/sw-on.png"/></a></td>
+		{% else %}
+		<td><a href="#" class="sswitch" id="sw{{i}}" title="{{i}}">
+			<img id="ic{{i}}" src="/static/sw-off.png"/></a></td>
+		{% endif %}
+	</tr>
+{% endfor %}
+</table>
+
+<script type="text/javascript">
+
+$(document).ready(function() {
+	$('.sswitch').each(function() {
+		$(this).click(function() {
+
+			var id=$(this).attr('title');
+
+			if ($(this).hasClass('on')) {
+				$.ajax({
+					url: '/api/v1/switch/' + id + '/0',
+					success: function(msg) { console.log(msg); }
+				});
+				$('#ic'+id).attr('src', '/static/sw-off.png');
+				$(this).removeClass('on');
+			} else {
+				$.ajax({
+					url: '/api/v1/switch/' + id + '/1',
+					success: function(msg) { console.log(msg); }
+				});
+				$('#ic'+id).attr('src', '/static/sw-on.png');
+				$(this).addClass('on');
+			}
+			return false;
+		});
+	});
+	setTimeout(update, 1000);
+});
+
+update = function() {
+
+	$.ajax({
+		url: '/api/v1/status',
+		success: function(data) {
+//			console.log(data);
+			for (i = 0; i < 8; i++) {
+				if (data[i]) {
+					$('#ic'+i).attr('src', '/static/sw-on.png');
+					$('#sw'+i).addClass('on');
+				} else {
+					$('#ic'+i).attr('src', '/static/sw-off.png');
+					$('#sw'+i).removeClass('on');
+				}
+			}
+		}
+	});
+	setTimeout(update, 1000);
+};
+
+
+
+</script>
+
+</html>
+
