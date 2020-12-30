@@ -1,0 +1,20 @@
+# config
+
+ports:
+ - name: Licht
+   permission:
+    - ALL
+ - name: Toaster
+   permission:
+    - charly
+ - name: Radio
+   permission:
+    - ALL
+   schedule_on:
+    - '08:00'
+    - '17:00'
+   schedule_off:
+    - '09:30'
+    - '20:00'
+
+

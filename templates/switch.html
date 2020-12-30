@@ -8,6 +8,7 @@
 		<td><a href="#" class="sswitch{% if sst[i] %} on{% endif %}" id="sw{{i}}" title="{{i}}">
 				<div class="swst{% if sst[i] %} on{% endif %}" id="ic{{i}}"></div>
 		</a></td>
+		<td>{% if (i < ports|length) %}{{ ports[i].name }}{% endif %}</td>
 	</tr>
 {% endfor %}
 </table>

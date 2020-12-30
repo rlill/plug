@@ -2,6 +2,7 @@ from flask import Flask, request, session, redirect, jsonify, render_template
 from gpiozero import LED, Button
 import yaml
 from functools import partial
+import yaml
 
 app = Flask(__name__)
 
@@ -10,7 +11,8 @@ sst = [False] * 8
 led = LED(17)
 button = Button(2)
 
-lock = False
+config = None
+
 
 @app.route('/api/v1/login', methods=['POST'])
 def api_login():
@@ -41,7 +43,8 @@ def login():
 @app.route('/switch')
 def switch():
 	global sst
-	return render_template('switch.html', sst=sst)
+	global config
+	return render_template('switch.html', sst=sst, ports=config['ports'])
 
 @app.route('/')
 def index():
@@ -57,12 +60,23 @@ def toggle(port):
 	else:
 		led.off()
 
+
+lock = False
+
 if __name__ == '__main__':
 	sst[2] = True
 
 	if not lock:
 		lock = True
 		button.when_pressed = partial(toggle, 0)
+
+		with open("config.yaml", 'r') as stream:
+			try:
+				config = yaml.safe_load(stream)
+				print(config)
+			except yaml.YAMLError as exc:
+				print(exc)
+				quit()
 
 	app.run(debug=True, host='0.0.0.0', port=80)
 
