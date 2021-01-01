@@ -2,7 +2,9 @@ from flask import Flask, request, session, redirect, jsonify, render_template
 from gpiozero import LED, Button
 import yaml
 from functools import partial
-import yaml
+import multiprocessing as mp
+import ctypes
+
 
 class PlugFlaskApp(Flask):
 	def run(self, host='0.0.0.0', port=80, debug=None, load_dotenv=True, **options):
@@ -10,20 +12,42 @@ class PlugFlaskApp(Flask):
 
 app = PlugFlaskApp(__name__)
 
-
-sst = [False] * 8
+sst = mp.Array(ctypes.c_bool, 8)
 
 led = LED(17)
 button = Button(2)
 
 config = None
 
+def toggle(port):
+	global led
+	global sst
+	print("toggle ", port)
+	sst[port] = not sst[port]
+	if sst[port]:
+		led.on()
+	else:
+		led.off()
 
 def setup_app(app):
 	# All your initialization code
-	print("SETUPPP")
+	global config
+        
+	sst[2] = True
+
+	if config == None:
+		button.when_pressed = partial(toggle, 0)
+		with open("config.yaml", 'r') as stream:
+			try:
+				config = yaml.safe_load(stream)
+				print(config)
+			except yaml.YAMLError as exc:
+				print(exc)
+				quit()
+
 
 setup_app(app)
+
 
 
 @app.route('/api/v1/login', methods=['POST'])
@@ -46,7 +70,8 @@ def api_switch(port, status):
 @app.route('/api/v1/status')
 def api_status():
 	global sst
-	return jsonify(sst)
+	lsst = sst[:].copy()
+	return jsonify(lsst)
 
 @app.route('/login', methods=['GET'])
 def login():
@@ -55,44 +80,13 @@ def login():
 @app.route('/switch')
 def switch():
 	global sst
-	global config
 	return render_template('switch.html', sst=sst, ports=config['ports'])
 
 @app.route('/')
 def index():
 	return '<a href="/switch">switch</a>'
 
-def toggle(port):
-	global led
-	global sst
-	print("toggle ", port)
-	sst[port] = not sst[port]
-	if sst[port]:
-		led.on()
-	else:
-		led.off()
-
-
-def init():
-	print('MyFlaskApp is starting up!')
-
-
-
 if __name__ == '__main__':
-
-	sst[2] = True
-
-	if config == None:
-		lock = True
-		button.when_pressed = partial(toggle, 0)
-
-		with open("config.yaml", 'r') as stream:
-			try:
-				config = yaml.safe_load(stream)
-				print(config)
-			except yaml.YAMLError as exc:
-				print(exc)
-				quit()
-
+	setup_app(app)
 	app.run()
 
