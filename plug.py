@@ -4,7 +4,12 @@ import yaml
 from functools import partial
 import yaml
 
-app = Flask(__name__)
+class PlugFlaskApp(Flask):
+	def run(self, host='0.0.0.0', port=80, debug=None, load_dotenv=True, **options):
+		super(PlugFlaskApp, self).run(host=host, port=port, debug=debug, load_dotenv=load_dotenv, **options)
+
+app = PlugFlaskApp(__name__)
+
 
 sst = [False] * 8
 
@@ -12,6 +17,13 @@ led = LED(17)
 button = Button(2)
 
 config = None
+
+
+def setup_app(app):
+	# All your initialization code
+	print("SETUPPP")
+
+setup_app(app)
 
 
 @app.route('/api/v1/login', methods=['POST'])
@@ -61,12 +73,16 @@ def toggle(port):
 		led.off()
 
 
-lock = False
+def init():
+	print('MyFlaskApp is starting up!')
+
+
 
 if __name__ == '__main__':
+
 	sst[2] = True
 
-	if not lock:
+	if config == None:
 		lock = True
 		button.when_pressed = partial(toggle, 0)
 
@@ -78,5 +94,5 @@ if __name__ == '__main__':
 				print(exc)
 				quit()
 
-	app.run(debug=True, host='0.0.0.0', port=80)
+	app.run()
 

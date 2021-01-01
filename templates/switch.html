@@ -1,7 +1,7 @@
 {% include 'head.html' %}
-	<h1>Smart Socket Switches</h1>
+<h1>Smart Socket Switches</h1>
 
-	<table>
+<table id="slist">
 {% for i in range(0, 8) %}
 	<tr>
 		<td>{{ i+1 }}</td>
@@ -12,6 +12,9 @@
 	</tr>
 {% endfor %}
 </table>
+
+<div id="msg">
+</div>
 
 <script type="text/javascript">
 
@@ -44,12 +47,16 @@ $(document).ready(function() {
 	setTimeout(update, 1000);
 });
 
+errcnt = 0;
 update = function() {
 
 	$.ajax({
 		url: '/api/v1/status',
 		success: function(data) {
 //			console.log(data);
+			errcnt = 0;
+			$('table#slist').show();
+			$('div#msg').hide();
 			for (i = 0; i < 8; i++) {
 				if (data[i]) {
 					$('#sw'+i).addClass('on');
@@ -59,9 +66,22 @@ update = function() {
 					$('#ic'+i).removeClass('on');
 				}
 			}
+		},
+		error: function(xhr, stat, err) {
+			console.log(stat, err);
+			errcnt++;
+		},
+		complete: function() {
+			if (errcnt > 5) {
+				$('table#slist').hide();
+				$('div#msg').show();
+				$('div#msg').html("<h2>Error</h2>No connection");
+				setTimeout(update, 60000);
+			} else {
+				setTimeout(update, 1000);
+			}
 		}
 	});
-	setTimeout(update, 1000);
 };
 
 
