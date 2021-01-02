@@ -4,17 +4,36 @@ ports:
  - name: Licht
    permission:
     - ALL
+   gpio_actor: 17
+   gpio_button: 2
  - name: Toaster
    permission:
     - charly
+   gpio_actor: 11
+   gpio_button: 3
  - name: Radio
    permission:
     - ALL
+   gpio_actor: 12
+   gpio_button: 4
    schedule_on:
     - '08:00'
     - '17:00'
    schedule_off:
     - '09:30'
     - '20:00'
+ - name: Christbaum
+   permission:
+    - ALL
+   gpio_actor: 13
+   gpio_button: 5
+ - name: Tomate
+   permission:
+    - charly
+   gpio_actor: 14
+   gpio_button: 6
 
+users:
+ - name: charly
+   password: '1234'
 

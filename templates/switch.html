@@ -2,7 +2,7 @@
 <h1>Smart Socket Switches</h1>
 
 <table id="slist">
-{% for i in range(0, 8) %}
+{% for i in range(0, ports|length) %}
 	<tr>
 		<td>{{ i+1 }}</td>
 		<td><a href="#" class="sswitch{% if sst[i] %} on{% endif %}" id="sw{{i}}" title="{{i}}">
