@@ -1,5 +1,10 @@
 {% include 'head.html' %}
-<h1>Smart Socket Switches</h1>
+
+<div class="body">
+
+	<h1>Smart Socket Switches</h1>
+	Current user: {{session['username']}}
+	
 
 <table id="slist">
 {% for i in range(0, ports|length) %}
@@ -16,6 +21,8 @@
 <div id="msg">
 </div>
 
+</div>
+
 <script type="text/javascript">
 
 $(document).ready(function() {
@@ -29,7 +36,6 @@ $(document).ready(function() {
 					url: '/api/v1/switch/' + id + '/0',
 					success: function(msg) { console.log(msg); }
 				});
-				$('#ic'+id).attr('src', '/static/sw-off.png');
 				$(this).removeClass('on');
 				$('#ic'+id).removeClass('on');
 			} else {
@@ -37,7 +43,6 @@ $(document).ready(function() {
 					url: '/api/v1/switch/' + id + '/1',
 					success: function(msg) { console.log(msg); }
 				});
-				$('#ic'+id).attr('src', '/static/sw-on.png');
 				$(this).addClass('on');
 				$('#ic'+id).addClass('on');
 			}
@@ -88,5 +93,5 @@ update = function() {
 
 </script>
 
-</html>
+{% include 'foot.html' %}
 

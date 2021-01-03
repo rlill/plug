@@ -1,4 +1,7 @@
 {% include 'head.html' %}
+
+<div class="content">
+
 	<h1>Smart Socket Login</h1>
 	<table>
 		<tr>
@@ -14,19 +17,23 @@
 			<td><input type="button" id="button_login" value="login"/>
 	</table>
 
+</div>
+
 <script type="text/javascript">
 
 $(document).ready(function(){
 	console.log('bind handler')
 	$('#button_login').click(function(){
-		console.log('call handler')
+		var formData = new FormData();
+		formData.append('username', $('#input_username').val());
+		formData.append('password', $('#input_password').val());
+
 		$.ajax({
 			url: '/api/v1/login',
 			method: 'POST',
-			data: {
-				username: $('#input_username').val(),
-				password: $('#input_password').val()
-			},
+			data: formData,
+			contentType: false,
+			processData: false,
 			success: function() {
 				alert('login ok');
 			}
@@ -36,5 +43,5 @@ $(document).ready(function(){
 
 </script>
 
-</html>
+{% include 'foot.html' %}
 

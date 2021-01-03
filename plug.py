@@ -4,13 +4,14 @@ import yaml
 from functools import partial
 import multiprocessing as mp
 import ctypes
-
+import hashlib
 
 class PlugFlaskApp(Flask):
 	def run(self, host='0.0.0.0', port=80, debug=None, load_dotenv=True, **options):
 		super(PlugFlaskApp, self).run(host=host, port=port, debug=debug, load_dotenv=load_dotenv, **options)
 
 app = PlugFlaskApp(__name__)
+app.secret_key = 'pr*WATsfFm9a"M_RJbsMm9j;\hH:=(,^EGftHX/_L</BrWXTbFY&wgQRh]dg2^\!R>djVbe7APC&d(='
 
 sst = None
 config = None
@@ -50,9 +51,18 @@ setup_app(app)
 
 @app.route('/api/v1/login', methods=['POST'])
 def api_login():
-	return {
-		"session": session['_id']
-	}
+	global config
+	username = request.form.get('username', None)
+	password = hashlib.md5(request.form.get('password', None).encode('utf-8')).hexdigest()
+
+	print('login user:', username, ' password:', password)
+
+	for user in config['users']:
+		if user['name'] == username and user['password'] == password:
+			print('user matched: ', user)
+			session['username'] = user['name']
+			return 'OK'
+	return "Unauthorized", 400
 
 @app.route('/api/v1/switch/<int:port>/<int:status>')
 def api_switch(port, status):
