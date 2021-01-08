@@ -1,4 +1,4 @@
-from flask import Flask, request, session, redirect, jsonify, render_template
+from flask import Flask, request, session, redirect, jsonify, render_template, url_for
 from gpiozero import LED, Button
 import yaml
 from functools import partial
@@ -86,6 +86,11 @@ def api_status():
 @app.route('/login', methods=['GET'])
 def login():
 	return render_template('login.html')
+
+@app.route('/logout', methods=['GET'])
+def logout():
+	session.pop('username', None)
+	return redirect(url_for('switch'))
 
 @app.route('/switch')
 def switch():
