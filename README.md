@@ -58,4 +58,4 @@ To create an device you may want to set up your Raspberry Pi with a read-only fi
 * https://medium.com/@andreas.schallwig/how-to-make-your-raspberry-pi-file-system-read-only-raspbian-stretch-80c0f7be7353
 
 ### Screenshot
-![Screenshot](https://github.com/rlill/plug/blob/main/static/screemshot.png?raw=true =150x)
+![](https://github.com/rlill/plug/blob/main/static/screemshot.png?raw=true)
