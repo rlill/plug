@@ -12,7 +12,7 @@
 {% set sun = session['username'] %}
 {% if sun|length %}
 		<a href="/logout"><div class="logout"></div></a>
-		N:<div class="user">{{ sun }}</div>
+		<div class="user">{{ sun }}</div>
 {% else %}
 		<a href="/login"><div class="login"></div></a>
 {% endif %}
