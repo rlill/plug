@@ -24,3 +24,6 @@ run it in the background:
 To create an device you may want to set up your Raspberry Pi with a read-only file-system to avoid damage if unplugged without shutdown.
 * https://www.raspberry-pi-geek.de/ausgaben/rpg/2018/08/raspbian-im-read-only-modus/2/
 * https://medium.com/@andreas.schallwig/how-to-make-your-raspberry-pi-file-system-read-only-raspbian-stretch-80c0f7be7353
+
+### Screenshot
+![Screenshot](static/screenshot.png)
