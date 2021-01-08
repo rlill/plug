@@ -69,12 +69,14 @@ def api_switch(port, status):
 	global sst
 	global config
 	if port >= 0 and port < len(config['ports']):
-		sst[port] = (status != 0)
-		gpio = config['ports'][port]['gpio']
-		if sst[port]:
-			gpio.on()
-		else:
-			gpio.off()
+		un = session['username'] if 'username' in session else ''
+		if 'ALL' in config['ports'][port]['permission'] or un in config['ports'][port]['permission']:
+			sst[port] = (status != 0)
+			gpio = config['ports'][port]['gpio']
+			if sst[port]:
+				gpio.on()
+			else:
+				gpio.off()
 	return 'OK'
 
 @app.route('/api/v1/status')

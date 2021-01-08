@@ -8,7 +8,7 @@ ports:
    gpio_button: 2
  - name: Toaster
    permission:
-    - charly
+    - sepp
    gpio_actor: 11
    gpio_button: 3
  - name: Radio

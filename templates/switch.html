@@ -8,10 +8,14 @@
 {% for i in range(0, ports|length) %}
 	<tr>
 		<td>{{ i+1 }}</td>
-		<td><a href="#" class="sswitch{% if sst[i] %} on{% endif %}" id="sw{{i}}" title="{{i}}">
+		<td>
+			{% if 'ALL' in ports[i].permission or session['username'] in ports[i].permission %}
+			<a href="#" class="sswitch{% if sst[i] %} on{% endif %}" id="sw{{i}}" title="{{i}}">
 				<div class="swst{% if sst[i] %} on{% endif %}" id="ic{{i}}"></div>
-		</a></td>
-		<td>{% if (i < ports|length) %}{{ ports[i].name }}{% endif %}</td>
+			</a>
+			{% endif %}
+		</td>
+		<td>{{ ports[i].name }}</td>
 	</tr>
 {% endfor %}
 </table>
