@@ -1,10 +1,14 @@
 # plug
 Raspberry Pi GPIO control with webservice
 
+## Description
 Minimal webservice that can be installed on a Raspberry Pi.
 It allows the user to control certain output pins of the GPIO by clicking the corresponding button.
 Permissions can be set so that only logged in users may switch an individual port on or off,
 or the port can be 'public'.
+
+Additionally every output pin can be toggled on and off also with a pushbutton connected to another
+GPIO pin which is configured as the corresponding input.
 
 ## Run in development mode
 To be allowed to use port 80 the program must be started as root
@@ -40,6 +44,7 @@ ports:
  - name: Toaster
    permission:
     - charly
+    - michelle
    gpio_actor: 11
    gpio_button: 3
 
@@ -47,7 +52,10 @@ users:
  - name: charly
    password: '81dc9bdb52d04dc20036dbd8313ed055'
 ```
-To store a password, MD5 + hex encode it, e. g. in Bash with
+Each port is one button (see screenshot below) and has a ```name```, a output pin ```gpio_actor```, optionally an input pin ```gpio_button```and a list of permitted users or ```ALL``` for buttons without access restriction.
+
+Each user has a ```name```and a ```passowrd``` stored as hex-encoded MD5 hash.
+You can encrypt it e. g. in Bash with
 ```
 $ echo -n '1234' | md5sum
 ```
